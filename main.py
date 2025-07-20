@@ -3,6 +3,8 @@ import logging
 from typing import Annotated
 
 from fastapi import FastAPI, Depends
+from fastapi.templating import Jinja2Templates
+from fasthx.jinja import Jinja
 
 from model import Meal, Food, MealPublic, MealPublicList, create_db_and_tables, get_session, create_test_data, delete_test_data
 from sqlmodel import Session, select
@@ -28,11 +30,12 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+jinja = Jinja(Jinja2Templates("templates"))
 
 @app.get("/")
-async def root():
-    logger.info("Root endpoint accessed")
-    return {"message": "Hello, World!"}
+@jinja.page("index.html")
+async def root() -> None:
+    ...
 
 
 @app.get("/food/", response_model=list[Food])
