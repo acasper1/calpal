@@ -60,6 +60,7 @@ async def create_food(food: Food, session: SessionDep):
 
 
 @app.get("/meal/", response_model=MealPublicList)
+@jinja.hx("meal-list.html")
 async def read_meals(session: SessionDep, offset: int = 0, limit: int = 100):
     results = session.exec(select(Meal).offset(offset).limit(limit)).all()
     meals: list[MealPublic] = []

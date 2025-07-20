@@ -1,0 +1,5 @@
+<ul class="list-group">
+    {% for meal in meals %}
+        <li class="list-group-item"> {{meal.meal.id}} {{meal.meal.eaten_at}} {{meal.meal.foods}} </li>
+    {% endfor %}
+</ul>

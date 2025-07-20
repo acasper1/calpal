@@ -6,4 +6,6 @@
 {% block content %}
 <h1 class="mb-3">CalPal</h1>
 Hello, World!
+<p class="my-3">Meals</p>
+<button type="button" class="btn btn-primary" hx-get="/meal/" hx-swap="outerHTML">Get Meals</button>
 {% endblock content %}
