@@ -38,13 +38,13 @@ async def root() -> None:
     ...
 
 
-@app.get("/food/", response_model=list[Food])
+@app.get("/foods/", response_model=list[Food])
 async def read_foods(session: SessionDep, offset: int = 0, limit: int = 100):
     foods = session.exec(select(Food).offset(offset).limit(limit)).all()
     return foods
 
 
-@app.get("/food/{food_id}", response_model=Food)
+@app.get("/foods/{food_id}", response_model=Food)
 async def read_food(food_id: int, session: SessionDep):
     result = session.exec(select(Food).where(Food.id==food_id)).first()
 
@@ -59,7 +59,7 @@ async def create_food(food: Food, session: SessionDep):
     return food
 
 
-@app.get("/meal/", response_model=MealPublicList)
+@app.get("/meals/", response_model=MealPublicList)
 @jinja.hx("meal-list.html")
 async def read_meals(session: SessionDep, offset: int = 0, limit: int = 100):
     results = session.exec(select(Meal).offset(offset).limit(limit)).all()
@@ -73,5 +73,6 @@ async def read_meals(session: SessionDep, offset: int = 0, limit: int = 100):
 @app.get("/meal/{meal_id}", response_model=MealPublic)
 async def read_meal(meal_id: int, session: SessionDep):
     result = session.exec(select(Meal).where(Meal.id==meal_id)).first()
+    assert result is not None, "No meals found"
 
     return MealPublic(meal=result, foods=result.foods)

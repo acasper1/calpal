@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List, Optional
 
 from sqlmodel import Field, SQLModel, create_engine, Session, Relationship, delete
 
@@ -24,12 +25,12 @@ class MealFoodLink(SQLModel, table=True):
 
 class MealBase(SQLModel):
     """Base model for Meals."""
-    eaten_at: datetime = Field(default=datetime.now())
+    created_at: datetime = Field(default=datetime.now())
 
 
 class Meal(MealBase, table=True):
     """Data about a specific meal."""
-    id: int | None = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
 
     foods: list["Food"] = Relationship(back_populates="meals", link_model=MealFoodLink)
 
@@ -42,8 +43,7 @@ class FoodBase(SQLModel):
 
 class Food(FoodBase, table=True):
     """Data about a specific food item."""
-    id: int = Field(primary_key=True)
-
+    id: Optional[int] = Field(default=None, primary_key=True)
     meals: list[Meal] = Relationship(back_populates="foods", link_model=MealFoodLink)
 
 
@@ -66,9 +66,9 @@ def create_test_data():
         food_4 = Food(name="Milk", calories=170)
         food_5 = Food(name="Peanut Butter & Jelly Sandwich", calories=600)
 
-        meal_1 = Meal(eaten_at=datetime(2025, 7, 16, 8, 30), foods=[food_3, food_4])
-        meal_2 = Meal(eaten_at=datetime(2025, 7, 16, 12, 30), foods=[food_5])
-        meal_3 = Meal(eaten_at=datetime(2025, 7, 16, 18, 00), foods=[food_1, food_2])
+        meal_1 = Meal(created_at=datetime(2025, 7, 16, 8, 30), foods=[food_3, food_4])
+        meal_2 = Meal(created_at=datetime(2025, 7, 16, 12, 30), foods=[food_5])
+        meal_3 = Meal(created_at=datetime(2025, 7, 16, 18, 00), foods=[food_1, food_2])
 
         session.add(food_1)
         session.add(food_2)
